@@ -1,0 +1,41 @@
+<!--pages/cartInfo/cartInfo.wxml-->
+<view class="body">
+  <map 
+    name="myMap" 
+    id="myMap" 
+    class="myMap" 
+    longitude="{{center.lon}}" 
+    latitude="{{center.lat}}" 
+    rotate="0" 
+    enable-rotate="false"
+    scale="18" 
+    markers="{{markers}}"
+    style="height:{{mapHeight}}px"
+  ></map>
+
+  <cover-view class="content" style="height:{{contentHeight}}px; margin-top:{{listTop}}px">
+    <cover-view class="gray-line" bindtap="showList"></cover-view>
+    <cover-view class="content-title" bindtap="showList">清洁车列表</cover-view>
+    <van-divider/>
+    <cover-view class="content-body">
+      <cover-view
+        class="content-item"
+        wx:for="{{cartList}}"
+        wx:key="item" 
+        wx:for-index="index" 
+        data-id="{{item.cartId}}"
+        data-name="{{item.cartName}}"
+        data-state="{{item.state}}"
+        bindtap="go2Detail"
+      >
+        <cover-image class="item-icon" src="../icon/车辆归属管理.png"></cover-image> 
+        <cover-view class="item-body">
+          <cover-view class="item-name">{{item.cartName}}</cover-view>
+          <cover-view class="item-load">车辆状态：{{item.state}}</cover-view>
+        </cover-view>
+      </cover-view>
+    </cover-view>
+  </cover-view>
+</view>
+
+

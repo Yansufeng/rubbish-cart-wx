@@ -1,0 +1,39 @@
+/* pages/cartInfo-admin/user/user.wxss */
+.blue {
+  background: #409EFF;
+  color: #FFF;
+}
+
+.light-blue {
+  font-size: 13px;
+  background: #ECF5FF;
+  color: #409EFF;
+}
+
+.title {
+  font-size: 30px;
+  margin: 20px;
+}
+
+.list-body {
+  margin: 0 20px;
+}
+
+.user-list-title {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.user-list-title-item {
+  padding: 5px 0;
+}
+
+.user-list {
+  text-align: center;
+}
+
+.list-item {
+  padding: 5px 0;
+  height: 40px;
+  line-height: 40px;
+}

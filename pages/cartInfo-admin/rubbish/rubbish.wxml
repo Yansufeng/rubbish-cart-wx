@@ -1,0 +1,4 @@
+<!--pages/cartInfo-admin/rubbish/rubbish.wxml-->
+<view class="body">
+  <view class="title">垃圾信息管理</view>
+</view>

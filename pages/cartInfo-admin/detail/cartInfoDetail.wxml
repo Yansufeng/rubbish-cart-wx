@@ -1,0 +1,33 @@
+<!--pages/cartInfo/detail/cartInfoDetail.wxml-->
+<view class="body">
+  <map 
+    name="myMap" 
+    id="myMap" 
+    class="myMap" 
+    longitude="{{center.lon}}" 
+    latitude="{{center.lat}}" 
+    rotate="0" 
+    enable-rotate="false"
+    scale="18" 
+    markers="{{markers}}"
+    style="height:{{mapHeight}}px"
+  ></map>
+
+  <cover-view class="content" style="height:{{contentHeight}}px; margin-top:{{listTop}}px">
+    <cover-view class="gray-line" bindtap="showList"></cover-view>
+    <cover-view class="content-title" bindtap="showList">{{cartInfo.name}}</cover-view>
+    <cover-view class="content-state">车辆当前状态：{{cartInfo.state}}</cover-view> 
+    <cover-view class="content-list-title">车上垃圾信息：</cover-view>
+    <cover-view
+      class="content-item"
+      wx:for="{{rubbishList}}"
+      wx:key="item"
+    >
+      <cover-view class="content-item-name">
+        <cover-image class="content-item-icon" src="{{iconList[item.typeId - 1].src}}"></cover-image>
+        <cover-view style="color:{{iconList[item.typeId - 1].color}}">{{item.name}}</cover-view>
+      </cover-view>
+      <cover-view class="content-item-num">已回收：{{item.num}}件</cover-view>
+    </cover-view>
+  </cover-view>
+</view>

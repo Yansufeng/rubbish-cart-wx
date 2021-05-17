@@ -1,0 +1,10 @@
+<!--pages/homepage/homepage.wxml-->
+<view class="body" style="height:{{height}}px">
+  <view class="title">
+    登录
+  </view>
+  <view class="index-body">
+    <button class="indexButton" open-type="getUserInfo" bindtap="getLogin">点击登录</button>
+    <van-dialog id="van-dialog" />  
+  </view>
+</view>

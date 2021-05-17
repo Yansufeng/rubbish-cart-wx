@@ -1,0 +1,42 @@
+<!--pages/cartInfo-admin/user/user.wxml-->
+<view class="body">
+  <view class="title">用户信息管理</view>
+  <view class="list-body">
+    <van-row custom-class="user-list-title">
+      <van-col span="8">
+        <view class="user-list-title-item blue" style="border-radius: 5px 0 0 0;">昵称</view>
+      </van-col>
+      <van-col span="8">
+        <view class="user-list-title-item blue">权限</view>
+      </van-col>
+      <van-col span="8">
+        <view class="user-list-title-item blue" style="border-radius: 0 5px 0 0;">操作</view>
+      </van-col>
+    </van-row>
+    <van-row
+      class="user-list"
+      wx:for="{{userList}}"
+      wx:for-index="index" 
+      wx:key="item"
+    >
+      <van-col span="8" custom-class="bule">
+        <view class="list-item light-blue">{{item.name}}</view>
+      </van-col>
+      <van-col span="8" custom-class="light-bule">
+        <view class="list-item light-blue">{{item.purviewName}}</view>
+      </van-col>
+      <van-col span="8" custom-class="bule">
+        <view class="list-item light-blue">
+          <van-button 
+            type="info" 
+            size="small" 
+            data-id="{{item.openId}}"
+            bind:click="updatePurview"
+          >修改权限</van-button>
+        </view>
+      </van-col>
+    </van-row>
+  </view>
+
+  <van-toast id="van-toast" />
+</view>

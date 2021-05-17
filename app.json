@@ -1,0 +1,43 @@
+{
+  "pages":[
+    
+    "pages/homepage/homepage",
+    "pages/cartInfo/cartInfo",
+    "pages/cartInfo/detail/cartInfoDetail",
+    "pages/cartInfo-admin/cartInfo",
+    "pages/cartInfo-admin/detail/cartInfoDetail",
+    "pages/cartInfo-admin/rubbish/rubbish",
+    "pages/cartInfo-admin/user/user",
+    "pages/index/index",
+    "pages/logs/logs"
+  ],
+  "tabBar": {
+    "selectedColor": "#409EFF",
+    "list": [
+      {
+        "selectedIconPath": "pages/icon/auto-selected.png",
+        "iconPath": "pages/icon/auto.png",
+        "pagePath": "pages/cartInfo-admin/cartInfo",
+        "text": "车辆信息管理"
+      },
+      {
+        "selectedIconPath": "pages/icon/user-center-selected.png",
+        "iconPath": "pages/icon/user-center.png",
+        "pagePath": "pages/cartInfo-admin/user/user",
+        "text": "用户信息管理"
+      }
+    ]
+  },
+  "window":{
+    "navigationBarBackgroundColor": "#409EFF",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "管理平台"
+  },
+  "usingComponents": {
+    "van-divider": "@vant/weapp/divider/index",
+    "van-row": "@vant/weapp/row/index",
+    "van-col": "@vant/weapp/col/index",
+    "van-button": "@vant/weapp/button/index"
+  },
+  "sitemapLocation": "sitemap.json"
+}
