@@ -21,6 +21,12 @@
         "text": "车辆信息管理"
       },
       {
+        "selectedIconPath": "pages/icon/ashbin-selected.png",
+        "iconPath": "pages/icon/ashbin.png",
+        "pagePath": "pages/cartInfo-admin/rubbish/rubbish",
+        "text": "垃圾信息管理"
+      },
+      {
         "selectedIconPath": "pages/icon/user-center-selected.png",
         "iconPath": "pages/icon/user-center.png",
         "pagePath": "pages/cartInfo-admin/user/user",
@@ -37,7 +43,8 @@
     "van-divider": "@vant/weapp/divider/index",
     "van-row": "@vant/weapp/row/index",
     "van-col": "@vant/weapp/col/index",
-    "van-button": "@vant/weapp/button/index"
+    "van-button": "@vant/weapp/button/index",
+    "van-field": "@vant/weapp/field/index"
   },
   "sitemapLocation": "sitemap.json"
 }

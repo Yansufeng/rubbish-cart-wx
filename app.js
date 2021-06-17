@@ -26,6 +26,7 @@ App({
 
   globalData: {
     baseUrl: "http://172.20.10.5:8888/",
+    baseWsUrl: "ws://172.20.10.5:8080/ws",
     userInfo: null,
     openId: ""
   }         

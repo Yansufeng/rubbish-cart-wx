@@ -1,4 +1,5 @@
 // pages/cartInfo/detail/cartInfoDetail.js
+import Toast from '@vant/weapp/toast/toast'
 const app = getApp();
 
 Page({
@@ -11,18 +12,12 @@ Page({
     contentHeight: 0,
     active: false,
     listTop: -30,
-    markers: [
-      {id: 1, latitude: 28.245749, longitude: 113.026757}
-    ],
+    markers: [],
     center: {
-      lat: 0,
-      lon: 0,
+      lat: 28.245749,
+      lon: 113.026757,
     },
-    cartInfo: {
-      id: 1,
-      name: "致远楼清洁车",
-      state: "正常"
-    },
+    cartInfo: null,
     rubbishList: [],
     iconList: [
       {id: 0, src: "../../icon/可回收物 (1).png", color: "#409EFF"},
@@ -37,19 +32,54 @@ Page({
    */
   onLoad: function (options) {
     let _this = this
-    // let cartInfo = {
-    //   id: options.id,
-    //   name: options.name,
-    //   state: options.state
-    // }
+    console.log(options)
+    let cartInfo = {
+      id: parseInt(options.id),
+      name: options.name,
+      state: options.state
+    }
     
-    this.getPosition()
     this.setData({
       mapHeight: app.globalData.bodyHeight * 0.6,
       contentHeight: app.globalData.bodyHeight * 0.4 + 50,
-      // cartInfo: cartInfo
+      cartInfo: cartInfo,
+      mapCtx: wx.createMapContext('myMap'),
     })
+    this.initMarkers()
+
     this.getRubbishList()
+  },
+
+  /**
+   * 图标信息初始化
+   */
+  initMarkers: function () {
+    const cartInfo = this.data.cartInfo
+    let markers = []
+    if(cartInfo.state == "异常") {
+      markers.push({
+        id: cartInfo.id,
+        latitude: 0, 
+        longitude: 0, 
+        iconPath: "../../icon/cart-danger.png", 
+        width: 40, 
+        height: 40,
+      })
+    }else{
+      markers.push({
+        id: cartInfo.id,
+        latitude: 0, 
+        longitude: 0, 
+        iconPath: "../../icon/cart.png", 
+        width: 40, 
+        height: 40,
+      })
+    }
+    this.setData({
+      markers: markers
+    })
+    console.log(this.data.markers)
+    this.wsConn()
   },
 
   /**
@@ -71,11 +101,12 @@ Page({
   getRubbishList() {
     const baseUrl = app.globalData.baseUrl
     const _this = this
-    console.log(this.data)
+    const cartId = this.data.cartInfo.id
+    
     wx.request({
       url: baseUrl + 'rubbish/get-rubbish',
       data: {
-        cartId: 1
+        cartId: cartId
       },
       method: "GET",
       header: {
@@ -91,6 +122,58 @@ Page({
       fail: function (res) {
         console.log("getRubbishList() FAIL : ", res)
       }
+    })
+  },
+  
+  /**
+   * 创建websocket连接并接受信息
+   */
+  wsConn: function () {
+    const _this = this
+    const url = app.globalData.baseWsUrl
+
+    if(!this.socketOpen) {
+      wx.connectSocket({
+        url: url,
+        success: function () {
+          console.log("websocket连接成功！")
+          _this.setData({
+            socketOpen: true
+          })
+        }
+      })
+    }
+
+    wx.onSocketMessage((res) => {
+      const cartId = this.data.cartInfo.id
+      let markers = this.data.markers
+      let pos = JSON.parse(res.data) 
+      
+      if(pos.state != null) {
+        return
+      }
+
+      if(!(pos.id == cartId)) {
+        return 
+      }
+
+      if(markers[0].latitude == 0) {
+        console.log(markers[0])
+        markers[0].latitude = pos.latitude
+        markers[0].longitude = pos.longitude
+        this.setData({
+          markers: markers
+        })
+      }
+
+      this.data.mapCtx.translateMarker({
+        markerId: pos.id,
+        duration: 2000,
+        destination: {
+          latitude:pos.latitude,
+          longitude:pos.longitude,
+        }
+      })
     })
   },
 
@@ -110,6 +193,24 @@ Page({
         contentHeight: app.globalData.bodyHeight - 30,
         active: true
       })
+    }
+  },
+
+  startBack: function () {
+    const socketOpen = this.data.socketOpen
+    const socketMsg = "{\"id\": 1, \"state\": \"back\"}"
+
+    if (socketOpen) {
+      sendSocketMessage(socketMsg)
+      Toast.success('发送指令成功');
+    }
+    
+    function sendSocketMessage(msg) {
+      if (socketOpen) {
+        wx.sendSocketMessage({
+          data:msg
+        })
+      } 
     }
   },
 

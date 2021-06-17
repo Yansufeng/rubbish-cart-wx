@@ -1,4 +1,34 @@
 <!--pages/cartInfo-admin/rubbish/rubbish.wxml-->
 <view class="body">
   <view class="title">垃圾信息管理</view>
+  <view
+    class="content-item"
+    wx:for="{{rubbishType}}"
+    wx:key="item"
+  >
+    <view class="content-item-name">
+      <image class="content-item-icon" src="{{iconList[item.iconId - 1].src}}"></image>
+      <view style="color:{{iconList[item.iconId - 1].color}}">{{item.name}}</view>
+    </view>
+  </view>
+
+  <view class="btn-body">
+    <van-cell-group>
+      <van-field
+        value="{{ newType }}"
+        center
+        clearable
+        placeholder="请输入新增加的垃圾分类"
+        border="{{ false }}"
+        bind:change="onChange"
+        use-button-slot
+      >
+        <van-button slot="button" size="small" type="primary" bindtap="addType">
+          增加
+        </van-button>
+      </van-field>
+    </van-cell-group>
+    <!-- <van-button type="info">增加新垃圾分类</van-button> -->
+  </view>
+  <van-toast id="van-toast" />
 </view>

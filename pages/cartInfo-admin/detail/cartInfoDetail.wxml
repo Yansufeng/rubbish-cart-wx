@@ -1,4 +1,5 @@
 <!--pages/cartInfo/detail/cartInfoDetail.wxml-->
+<van-toast id="van-toast" />
 <view class="body">
   <map 
     name="myMap" 
@@ -18,6 +19,7 @@
     <cover-view class="content-title" bindtap="showList">{{cartInfo.name}}</cover-view>
     <cover-view class="content-state">车辆当前状态：{{cartInfo.state}}</cover-view> 
     <cover-view class="content-list-title">车上垃圾信息：</cover-view>
+    
     <cover-view
       class="content-item"
       wx:for="{{rubbishList}}"
@@ -29,5 +31,8 @@
       </cover-view>
       <cover-view class="content-item-num">已回收：{{item.num}}件</cover-view>
     </cover-view>
+
+    <cover-view class="back-btn" wx:if="{{cartInfo.state === '正常'}}" bindtap="startBack">开始返航</cover-view>
   </cover-view>
+  
 </view>

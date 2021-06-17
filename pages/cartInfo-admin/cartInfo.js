@@ -7,6 +7,8 @@ Page({
    * 页面的初始数据
    */
   data: {
+    socketOpen: false,
+    socketMsgQueue: [],
     mapHeight: 0,
     contentHeight: 0,
     active: false,
@@ -15,10 +17,7 @@ Page({
       lat: 28.245749,
       lon: 113.026757,
     },
-    markers: [
-      {id: 1, latitude: 28.245749, longitude: 113.026757, iconPath: "../icon/cart.png", width: 40, height: 40},
-      {id: 2, latitude: 28.246269, longitude: 113.026016, iconPath: "../icon/cart.png", width: 40, height: 40}
-    ],
+    markers: [],
     cartList: []
   },
 
@@ -29,9 +28,11 @@ Page({
     let _this = this
     this.setData({
       mapHeight: app.globalData.bodyHeight * 0.6,
-      contentHeight: app.globalData.bodyHeight * 0.4 + 50
+      contentHeight: app.globalData.bodyHeight * 0.4 + 50,
+      mapCtx: wx.createMapContext('myMap')
     })
     this.getCartList()
+    this.wsConn()
   },
 
   /**
@@ -51,10 +52,92 @@ Page({
         _this.setData({
           cartList: res.data.cartList
         })
+        _this.initMarkers()
       },
       fail: function (res) {
         console.log("getCartList FAIL : ", res)
       }
+    })
+  },
+
+  /**
+   * 初始化图标
+   */
+  initMarkers: function () {
+    const _this = this
+    let cartList = this.data.cartList
+    let markers = []
+    console.log(cartList)
+    for(let i = 0; i < cartList.length; i++) {
+      console.log(cartList[i])
+      if(cartList[i].state == "异常") {
+        markers.push({
+          id: cartList[i].cartId,
+          latitude: 0, 
+          longitude: 0, 
+          iconPath: "../icon/cart-danger.png", 
+          width: 40, 
+          height: 40,
+        })
+      }else{
+        markers.push({
+          id: cartList[i].cartId,
+          latitude: 0, 
+          longitude: 0, 
+          iconPath: "../icon/cart.png", 
+          width: 40, 
+          height: 40,
+        })
+      }
+    }
+
+    this.setData({
+      markers: markers
+    })
+  },
+
+  /**
+   * 创建websocket连接并接受信息
+   */
+  wsConn: function () {
+    const _this = this
+    const socketOpen = this.data.socketOpen
+    const url = app.globalData.baseWsUrl
+
+    if(!socketOpen) {
+      wx.connectSocket({
+        url: url,
+        success: function () {
+          console.log("websocket连接成功！")
+          _this.setData({
+            socketOpen: true
+          })
+        }
+      })
+    }
+
+    wx.onSocketMessage((res) => {
+      console.log(res.data)
+      let markers = this.data.markers
+      let pos = JSON.parse(res.data) 
+      console.log(pos)
+
+      if(markers[pos.id - 1].latitude == 0) {
+        console.log(markers[pos.id - 1])
+        markers[pos.id - 1].latitude = pos.latitude
+        markers[pos.id - 1].longitude = pos.longitude
+        this.setData({
+          markers: markers
+        })
+      }
+      this.data.mapCtx.translateMarker({
+        markerId: pos.id,
+        duration: 2000,
+        destination: {
+          latitude:pos.latitude,
+          longitude:pos.longitude,
+        }
+      })
     })
   },
 
@@ -85,8 +168,14 @@ Page({
     let id = e.currentTarget.dataset.id
     let name = e.currentTarget.dataset.name
     let state = e.currentTarget.dataset.state
+
+    this.setData({
+      socketOpen: false
+    })
+    wx.closeSocket()
+
     wx.navigateTo({
-      url: '../cartInfo/detail/cartInfoDetail?id=' + id + '&name=' + name + '&state=' + state,
+      url: '../cartInfo-admin/detail/cartInfoDetail?id=' + id + '&name=' + name + '&state=' + state,
     })
   },
 
@@ -101,7 +190,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.wsConn()
   },
 
   /**

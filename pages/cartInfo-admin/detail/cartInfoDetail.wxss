@@ -68,3 +68,14 @@
 .content-item-num {
   line-height: 40px;
 }
+
+.back-btn {
+  height: 50px;
+  line-height: 50px;
+  width: 150px;
+  text-align: center;
+  margin: 10px auto;
+  background: #409EFF;
+  color: #FFF;
+  border-radius: 5px;
+}
